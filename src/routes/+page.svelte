@@ -158,9 +158,9 @@
 				</div>
 				<div
 					class="tab-content"
-					style="margin-top:-2px; z-index:2; position:relative; background:#e0f2fe;"
+					style="margin-top:-2px; z-index:2; position:relative; background:#e2e8f0;"
 				>
-					<input type="text" id="address" bind:value={address} placeholder="Target Address" />
+					<input type="text" id="address" bind:value={address} placeholder="Address" />
 				</div>
 			</div>
 		</div>
@@ -247,13 +247,13 @@
 	}
 
 	.chain-option.selected {
-		background: #e0f2fe;
+		background: #e2e8f0;
 		border-color: #3b82f6;
 	}
 	.selected-tab {
 		border-bottom-left-radius: 0;
 		border-bottom-right-radius: 0;
-		border-bottom-color: #e0f2fe !important;
+		border-bottom-color: #e2e8f0 !important;
 		z-index: 3;
 	}
 
@@ -273,10 +273,6 @@
 		border-radius: 8px;
 		outline: none;
 		transition: border-color 0.2s;
-	}
-
-	.tab-content input:focus {
-		border-color: #3b82f6;
 	}
 
 	.token-selector {
@@ -348,7 +344,7 @@
 	}
 
 	input:focus {
-		border-color: #3b82f6;
+		border-color: #555e6c;
 	}
 
 	input[readonly] {
