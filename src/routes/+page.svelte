@@ -28,18 +28,40 @@
 		const toX = toRect.left + toRect.width / 2 - svgRect.left;
 		const toY = toRect.top - svgRect.top;
 
-		const horizontalY = (fromY + toY) / 2; // Horizontal center
-		const cornerRadius = 10; // Radius for smooth corners
-		const arrowOffset = 10; // Horizontal offset for line before the arrow tip
-		const path = `
-	M ${fromX},${fromY} 
-	L ${fromX},${horizontalY - cornerRadius} 
-	A ${cornerRadius},${cornerRadius} 0 0 0 ${fromX + cornerRadius},${horizontalY} 
-	L ${toX - cornerRadius - arrowOffset},${horizontalY} 
-	A ${cornerRadius},${cornerRadius} 0 0 1 ${toX - arrowOffset},${horizontalY + cornerRadius} 
-	L ${toX - 11},${horizontalY + cornerRadius} 
-	L ${toX - 11},${toY}
-`;
+		const threshold = 5;
+		const isVerticallyAligned = Math.abs(fromX - toX) <= threshold;
+
+		let path = '';
+
+		if (isVerticallyAligned) {
+			path = `
+            M ${fromX},${fromY}
+            L ${fromX},${toY}
+        `;
+		} else {
+			const horizontalY = (fromY + toY) / 2;
+			const cornerRadius = 10;
+			const arrowOffset = 10;
+
+			const isLeftToRight = fromX <= toX;
+			const isTopToBottom = fromY <= toY;
+
+			const signX = isLeftToRight ? 1 : -1;
+			const signY = isTopToBottom ? 1 : -1;
+
+			const firstArcSweep = signX === signY ? 0 : 1;
+			const secondArcSweep = signX === signY ? 1 : 0;
+
+			path = `
+            M ${fromX},${fromY}
+            L ${fromX},${horizontalY - signY * cornerRadius}
+            A ${cornerRadius},${cornerRadius} 0 0 ${firstArcSweep} ${fromX + signX * cornerRadius},${horizontalY}
+            L ${toX - signX * (cornerRadius + arrowOffset)},${horizontalY}
+            A ${cornerRadius},${cornerRadius} 0 0 ${secondArcSweep} ${toX - signX * arrowOffset},${horizontalY + signY * cornerRadius}
+            L ${toX - signX * 11},${horizontalY + signY * cornerRadius}
+            L ${toX - signX * 11},${toY}
+        `;
+		}
 
 		arrowPath.setAttribute('d', path);
 	}
@@ -132,10 +154,9 @@
 						</div>
 					{/each}
 				</div>
-			</div>
-
-			<div class="field w-full">
-				<input type="text" id="address" bind:value={address} placeholder="Target Address" />
+				<div class="tab-content">
+					<input type="text" id="address" bind:value={address} placeholder="Target Address" />
+				</div>
 			</div>
 		</div>
 
@@ -225,10 +246,26 @@
 		border-color: #3b82f6;
 	}
 
-	.chain-logo {
-		width: 32px;
-		height: 32px;
-		border-radius: 50%;
+	.tab-content {
+		margin-top: 1rem;
+		padding: 1rem;
+		background: #ffffff;
+		border: 2px solid #3b82f6;
+		border-radius: 12px;
+	}
+
+	.tab-content input {
+		width: 100%;
+		padding: 0.75rem;
+		font-size: 1rem;
+		border: 1px solid #e2e8f0;
+		border-radius: 8px;
+		outline: none;
+		transition: border-color 0.2s;
+	}
+
+	.tab-content input:focus {
+		border-color: #3b82f6;
 	}
 
 	.token-selector {
