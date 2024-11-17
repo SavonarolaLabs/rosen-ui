@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { chains } from './chains';
+	import { chains } from '$lib/chains';
+
 	import { onMount, afterUpdate, tick } from 'svelte';
 
 	let fromChain = 'Cardano';
