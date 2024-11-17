@@ -147,6 +147,7 @@
 						<div
 							class="chain-option"
 							class:selected={toChain === chainName}
+							class:selected-tab={toChain === chainName}
 							on:click={() => (toChain = chainName)}
 							use:storeToElement={chainName}
 						>
@@ -155,7 +156,10 @@
 						</div>
 					{/each}
 				</div>
-				<div class="tab-content">
+				<div
+					class="tab-content"
+					style="margin-top:-2px; z-index:2; position:relative; background:#e0f2fe;"
+				>
 					<input type="text" id="address" bind:value={address} placeholder="Target Address" />
 				</div>
 			</div>
@@ -245,6 +249,12 @@
 	.chain-option.selected {
 		background: #e0f2fe;
 		border-color: #3b82f6;
+	}
+	.selected-tab {
+		border-bottom-left-radius: 0;
+		border-bottom-right-radius: 0;
+		border-bottom-color: #e0f2fe !important;
+		z-index: 3;
 	}
 
 	.tab-content {
