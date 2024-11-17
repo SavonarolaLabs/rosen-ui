@@ -28,16 +28,14 @@
 		const toX = toRect.left + toRect.width / 2 - svgRect.left;
 		const toY = toRect.top - svgRect.top;
 
-		const midY = (fromY + toY) / 2;
-		const controlXStart = fromX;
-		const controlXEnd = toX;
+		const verticalOffset = 0; // Outgoing vertical line length
+		const horizontalY = (fromY + toY) / 2; // Middle horizontal line
 
-		// Improved Path Segments
 		const path = `
 		M ${fromX},${fromY} 
-		L ${fromX},${midY - 20} 
-		Q ${controlXStart},${midY} ${controlXEnd},${midY - 20} 
-		L ${toX},${toY - 20}
+		L ${fromX},${horizontalY - verticalOffset} 
+		Q ${fromX},${horizontalY} ${(fromX + toX) / 2},${horizontalY} 
+		Q ${toX},${horizontalY} ${toX},${horizontalY + verticalOffset / 2} 
 		L ${toX},${toY}
 	`;
 		arrowPath.setAttribute('d', path);
