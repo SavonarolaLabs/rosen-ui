@@ -28,16 +28,19 @@
 		const toX = toRect.left + toRect.width / 2 - svgRect.left;
 		const toY = toRect.top - svgRect.top;
 
-		const verticalOffset = 0; // Outgoing vertical line length
-		const horizontalY = (fromY + toY) / 2; // Middle horizontal line
-
+		const horizontalY = (fromY + toY) / 2; // Horizontal center
+		const cornerRadius = 10; // Radius for smooth corners
+		const arrowOffset = 10; // Horizontal offset for line before the arrow tip
 		const path = `
-		M ${fromX},${fromY} 
-		L ${fromX},${horizontalY - verticalOffset} 
-		Q ${fromX},${horizontalY} ${(fromX + toX) / 2},${horizontalY} 
-		Q ${toX},${horizontalY} ${toX},${horizontalY + verticalOffset / 2} 
-		L ${toX},${toY}
-	`;
+	M ${fromX},${fromY} 
+	L ${fromX},${horizontalY - cornerRadius} 
+	A ${cornerRadius},${cornerRadius} 0 0 0 ${fromX + cornerRadius},${horizontalY} 
+	L ${toX - cornerRadius - arrowOffset},${horizontalY} 
+	A ${cornerRadius},${cornerRadius} 0 0 1 ${toX - arrowOffset},${horizontalY + cornerRadius} 
+	L ${toX - 11},${horizontalY + cornerRadius} 
+	L ${toX - 11},${toY}
+`;
+
 		arrowPath.setAttribute('d', path);
 	}
 
