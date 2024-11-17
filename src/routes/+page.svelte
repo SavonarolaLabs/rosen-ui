@@ -13,9 +13,8 @@
 	let toElements = new Map<string, HTMLElement>();
 	let svg: SVGSVGElement;
 	let arrowPath: SVGPathElement;
-
 	async function updateArrow() {
-		await tick(); // Wait for DOM updates
+		await tick();
 		const fromElement = fromElements.get(fromChain);
 		const toElement = toElements.get(toChain);
 		if (!fromElement || !toElement || !svg) return;
@@ -30,12 +29,17 @@
 		const toY = toRect.top - svgRect.top;
 
 		const midY = (fromY + toY) / 2;
-		const controlPoint1X = fromX;
-		const controlPoint1Y = midY;
-		const controlPoint2X = toX;
-		const controlPoint2Y = midY;
+		const controlXStart = fromX;
+		const controlXEnd = toX;
 
-		const path = `M ${fromX},${fromY} C ${controlPoint1X},${controlPoint1Y} ${controlPoint2X},${controlPoint2Y} ${toX},${toY}`;
+		// Improved Path Segments
+		const path = `
+		M ${fromX},${fromY} 
+		L ${fromX},${midY - 20} 
+		Q ${controlXStart},${midY} ${controlXEnd},${midY - 20} 
+		L ${toX},${toY - 20}
+		L ${toX},${toY}
+	`;
 		arrowPath.setAttribute('d', path);
 	}
 
