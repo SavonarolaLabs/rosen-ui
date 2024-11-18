@@ -1,3 +1,5 @@
+![Demo](https://cdn.imgchest.com/files/my8xcdeq8o4.png)
+
 # sv
 
 Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
