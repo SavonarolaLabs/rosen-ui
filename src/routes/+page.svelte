@@ -92,6 +92,41 @@
 	afterUpdate(() => {
 		updateArrow();
 	});
+
+	let selectedToken = null;
+
+	let tokens = [
+		{ symbol: 'ERG', name: 'Ergo', selected: false },
+		{ symbol: 'rsVYFI', name: 'VyFi', selected: false },
+		{ symbol: 'rsSUNDAE', name: 'SundaeSwap', selected: false },
+		{ symbol: 'rsLQ', name: 'Liqwid', selected: false },
+		{ symbol: 'rsBTN', name: 'Button', selected: false },
+		{ symbol: 'rsSNEK', name: 'Snek', selected: false },
+		{ symbol: 'RSN', name: 'RSN Token', selected: false },
+		{ symbol: 'rsMIN', name: 'MinSwap', selected: false }
+	];
+
+	function selectToken(token) {
+		tokens.forEach((t) => (t.selected = false)); // Reset all tokens
+		token.selected = true; // Mark the clicked token as selected
+		selectedToken = token;
+		tokens = tokens;
+	}
+	function focusInput(token) {
+		selectToken(token);
+		// Use `tick` to ensure DOM is updated before focusing
+		tick().then(() => {
+			const input = document.querySelector(`#amount-${token.symbol}`);
+			if (input) input.focus();
+		});
+	}
+	function targetChainName(name) {
+		if (name.startsWith('rs')) {
+			return name.split('rs')[0];
+		} else {
+			return 'rs' + name;
+		}
+	}
 </script>
 
 <div class="relative flex flex-col justify-center" style="height:100vh;">
@@ -108,7 +143,7 @@
 				refX="9"
 				refY="3.5"
 				orient="auto"
-				fill="#3b82f6"
+				fill="#999"
 			>
 				<polygon points="0 0, 10 3.5, 0 7" />
 			</marker>
@@ -117,7 +152,7 @@
 			id="connector-path"
 			bind:this={arrowPath}
 			fill="none"
-			stroke="#3b82f6"
+			stroke="#999"
 			stroke-width="2"
 			marker-end="url(#arrowhead)"
 		/>
@@ -125,7 +160,7 @@
 
 	<div class="widget">
 		<div class="chain-selector">
-			<div class="chain-list from">
+			<div class="chain-list from" style="margin-top:0;">
 				<div class="chain-options">
 					{#each Object.entries(chains) as [chainName, chain]}
 						<div
@@ -156,50 +191,64 @@
 						</div>
 					{/each}
 				</div>
-				<div
-					class="tab-content"
-					style="margin-top:-2px; z-index:2; position:relative; background:#e2e8f0;"
-				>
-					<input type="text" id="address" bind:value={address} placeholder="Address" />
+				<div class="tab-content" style="margin-top:-2px; z-index:2; position:relative;">
+					<input type="text" id="address" bind:value={address} placeholder="{toChain} Address" />
 				</div>
 			</div>
 		</div>
 
 		<div class="token-selector">
 			<div class="token-list">
-				{#each Object.entries(chains) as [_, chain]}
+				{#each tokens as token}
 					<div
 						class="token-item"
-						class:selected={token === chain.symbol}
-						on:click={() => (token = chain.symbol)}
+						class:selected={token.selected}
+						on:click={() => focusInput(token)}
 					>
 						<div class="flex w-20 gap-4">
-							{@html chain.logo}
 							<div class="token-info">
-								<span class="token-symbol">{chain.symbol}</span>
-								<span class="token-name">{chain.name}</span>
+								<span class="token-symbol">{token.symbol}</span>
+								<span class="token-name">{fromChain}</span>
 							</div>
 						</div>
-						{#if token === chain.symbol}
-							<input id="amount" bind:value={amount} placeholder="Enter amount" min="0" />
-						{/if}
+						<input
+							id="amount-{token.symbol}"
+							bind:value={amount}
+							placeholder="Amount"
+							min="0"
+							style="visibility: {token.selected ? 'visible' : 'hidden'};"
+						/>
+						<span style="visibility: {token.selected ? 'visible' : 'hidden'};">→</span>
+						<div
+							class="w-full text-end"
+							style="visibility: {token.selected ? 'visible' : 'hidden'};"
+						>
+							<div class="token-info">
+								<span>{'489.08 '}{targetChainName(token.symbol)}</span>
+								<span class="token-name">{toChain}</span>
+							</div>
+						</div>
 					</div>
 				{/each}
 			</div>
 		</div>
 
 		<button class="transfer-button" on:click={() => alert('Transfer initiated!')}>
-			Transfer {token}
+			Transfer {tokens.find((t) => t.selected)?.symbol}
 		</button>
 	</div>
 </div>
 
 <style>
+	.invert {
+		filter: invert(1) !important;
+	}
+
 	.widget {
 		display: flex;
 		flex-direction: column;
 		gap: 2rem;
-		max-width: 600px;
+		max-width: 610px;
 		margin: 0 auto;
 		padding: 2rem;
 		background: #ffffff;
@@ -248,8 +297,9 @@
 
 	.chain-option.selected {
 		background: #e2e8f0;
-		border-color: #3b82f6;
+		border-color: #e2e8f0;
 	}
+
 	.selected-tab {
 		border-bottom-left-radius: 0;
 		border-bottom-right-radius: 0;
@@ -260,8 +310,7 @@
 	.tab-content {
 		margin-top: 1rem;
 		padding: 1rem;
-		background: #ffffff;
-		border: 2px solid #3b82f6;
+		border: 2px solid #e2e8f0;
 		border-radius: 12px;
 	}
 
@@ -269,10 +318,8 @@
 		width: 100%;
 		padding: 0.75rem;
 		font-size: 1rem;
-		border: 1px solid #e2e8f0;
 		border-radius: 8px;
 		outline: none;
-		transition: border-color 0.2s;
 	}
 
 	.token-selector {
@@ -337,14 +384,24 @@
 	input {
 		padding: 0.75rem;
 		font-size: 1rem;
-		border: 1px solid #e2e8f0;
 		border-radius: 8px;
 		outline: none;
 		transition: border-color 0.2s;
+
+		border: none !important;
+		outline: none !important;
+		box-shadow: none !important;
+	}
+	input:-webkit-autofill {
+		-webkit-box-shadow: 0 0 0 1000px white inset !important;
+		box-shadow: 0 0 0 1000px white inset !important;
+		-webkit-text-fill-color: inherit !important;
 	}
 
 	input:focus {
-		border-color: #555e6c;
+		border: none !important;
+		outline: none !important;
+		box-shadow: none !important;
 	}
 
 	input[readonly] {
