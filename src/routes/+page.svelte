@@ -158,88 +158,108 @@
 		/>
 	</svg>
 
-	<div class="widget">
-		<div class="chain-selector">
-			<div class="chain-list from" style="margin-top:0;">
-				<div class="chain-options">
-					{#each Object.entries(chains) as [chainName, chain]}
-						<div
-							class="chain-option"
-							class:selected={fromChain === chainName}
-							on:click={() => (fromChain = chainName)}
-							use:storeFromElement={chainName}
-						>
-							{@html chain.logo}
-							<span>{chainName}</span>
-						</div>
-					{/each}
-				</div>
-			</div>
+	<div class="vertical-text ml-10 text-7xl text-white" style="opacity:0.75;">ROSEN</div>
+	<div class="secured">Secured by Ergo.</div>
 
-			<div class="chain-list to">
-				<div class="chain-options">
-					{#each Object.entries(chains) as [chainName, chain]}
-						<div
-							class="chain-option"
-							class:selected={toChain === chainName}
-							class:selected-tab={toChain === chainName}
-							on:click={() => (toChain = chainName)}
-							use:storeToElement={chainName}
-						>
-							{@html chain.logo}
-							<span>{chainName}</span>
-						</div>
-					{/each}
-				</div>
-				<div class="tab-content" style="margin-top:-2px; z-index:2; position:relative;">
-					<input type="text" id="address" bind:value={address} placeholder="{toChain} Address" />
-				</div>
-			</div>
-		</div>
-
-		<div class="token-selector">
-			<div class="token-list">
-				{#each tokens as token}
-					<div
-						class="token-item"
-						class:selected={token.selected}
-						on:click={() => focusInput(token)}
-					>
-						<div class="flex w-20 gap-4">
-							<div class="token-info">
-								<span class="token-symbol">{token.symbol}</span>
-								<span class="token-name">{fromChain}</span>
+	<div class="flex flex-col items-center gap-4">
+		<div class="widget" style="height:fit-content">
+			<div class="chain-selector">
+				<div class="chain-list from" style="margin-top:0;">
+					<div class="chain-options">
+						{#each Object.entries(chains) as [chainName, chain]}
+							<div
+								class="chain-option"
+								class:selected={fromChain === chainName}
+								on:click={() => (fromChain = chainName)}
+								use:storeFromElement={chainName}
+							>
+								{@html chain.logo}
+								<span>{chainName}</span>
 							</div>
-						</div>
-						<input
-							id="amount-{token.symbol}"
-							bind:value={amount}
-							placeholder="Amount"
-							min="0"
-							style="visibility: {token.selected ? 'visible' : 'hidden'};"
-						/>
-						<span style="visibility: {token.selected ? 'visible' : 'hidden'};">→</span>
-						<div
-							class="w-full text-end"
-							style="visibility: {token.selected ? 'visible' : 'hidden'};"
-						>
-							<div class="token-info">
-								<span>{'489.08 '}{targetChainName(token.symbol)}</span>
-								<span class="token-name">{toChain}</span>
-							</div>
-						</div>
+						{/each}
 					</div>
-				{/each}
-			</div>
-		</div>
+				</div>
 
-		<button class="transfer-button" on:click={() => alert('Transfer initiated!')}>
-			Transfer {tokens.find((t) => t.selected)?.symbol}
-		</button>
+				<div class="chain-list to">
+					<div class="chain-options">
+						{#each Object.entries(chains) as [chainName, chain]}
+							<div
+								class="chain-option"
+								class:selected={toChain === chainName}
+								class:selected-tab={toChain === chainName}
+								on:click={() => (toChain = chainName)}
+								use:storeToElement={chainName}
+							>
+								{@html chain.logo}
+								<span>{chainName}</span>
+							</div>
+						{/each}
+					</div>
+					<div class="tab-content" style="margin-top:-2px; z-index:2; position:relative;">
+						<input type="text" id="address" bind:value={address} placeholder="{toChain} Address" />
+					</div>
+				</div>
+			</div>
+
+			<div class="token-selector">
+				<div class="token-list">
+					{#each tokens as token}
+						<div
+							class="token-item"
+							class:selected={token.selected}
+							on:click={() => focusInput(token)}
+						>
+							<div class="flex gap-4" style="width:240px;">
+								<div class="token-info">
+									<span class="token-symbol">{token.symbol}</span>
+									<span class="token-name">{fromChain}</span>
+								</div>
+							</div>
+							<input
+								id="amount-{token.symbol}"
+								bind:value={amount}
+								placeholder="Amount"
+								min="0"
+								style="visibility: {token.selected ? 'visible' : 'hidden'};"
+							/>
+							<span style="visibility: {token.selected ? 'visible' : 'hidden'};">→</span>
+							<div
+								class="w-full text-end"
+								style="visibility: {token.selected ? 'visible' : 'hidden'};"
+							>
+								<div class="token-info">
+									<span>{'489.08 '}{targetChainName(token.symbol)}</span>
+									<span class="token-name">{toChain}</span>
+								</div>
+							</div>
+						</div>
+					{/each}
+				</div>
+			</div>
+
+			<button class="transfer-button" on:click={() => alert('Transfer initiated!')}>
+				Transfer {tokens.find((t) => t.selected)?.symbol}
+			</button>
+		</div>
 	</div>
 </div>
 
 <style>
+	.secured {
+		color: rgba(255, 255, 255, 0.724);
+		font-family: monospace, monospace;
+		position: absolute;
+		bottom: 0;
+		right: 0;
+		margin-bottom: 20px;
+		margin-right: 20px;
+	}
+	.vertical-text {
+		position: absolute;
+		font-size: 160px;
+		writing-mode: vertical-rl; /* Makes the text vertical */
+		text-orientation: upright; /* Ensures letters are upright */
+	}
 	.invert {
 		filter: invert(1) !important;
 	}
