@@ -74,7 +74,7 @@
 		}
 
 		function updateCamera(t: number) {
-			const time = t * 0.1;
+			const time = t * 0.0;
 			const looptime = 4 * 1000;
 			const p = (time % looptime) / looptime;
 			const pos = tubeGeo.parameters.path.getPointAt(p);

@@ -143,7 +143,7 @@
 				refX="9"
 				refY="3.5"
 				orient="auto"
-				fill="#999"
+				fill="#fff"
 			>
 				<polygon points="0 0, 10 3.5, 0 7" />
 			</marker>
@@ -152,13 +152,13 @@
 			id="connector-path"
 			bind:this={arrowPath}
 			fill="none"
-			stroke="#999"
+			stroke="#fff"
 			stroke-width="2"
 			marker-end="url(#arrowhead)"
 		/>
 	</svg>
 
-	<div class="vertical-text ml-10 text-7xl text-white" style="opacity:0.75;">ROSEN</div>
+	<div class="vertical-text text-#f6dbf5d9 ml-10 text-7xl" style="opacity:0.75;">ROSEN</div>
 	<div class="secured">Secured by Ergo.</div>
 
 	<div class="widget self-end" style="height:fit-content">
@@ -194,7 +194,10 @@
 						</div>
 					{/each}
 				</div>
-				<div class="tab-content" style="margin-top:-2px; z-index:2; position:relative;">
+				<div
+					class="tab-content"
+					style="background:rgba(62, 48, 192, 0.5);margin-top:-2px; z-index:2; position:relative;"
+				>
 					<input type="text" id="address" bind:value={address} placeholder="{toChain} Address" />
 				</div>
 			</div>
@@ -257,6 +260,13 @@
 		font-size: 160px;
 		writing-mode: vertical-rl; /* Makes the text vertical */
 		text-orientation: upright; /* Ensures letters are upright */
+		position: absolute;
+		font-size: 160px;
+		writing-mode: vertical-rl;
+		text-orientation: upright;
+		color: rgba(62, 48, 192, 0.9);
+		font-family: 'Press Start 2P', monospace;
+		text-transform: uppercase;
 	}
 	.invert {
 		filter: invert(1) !important;
@@ -274,6 +284,13 @@
 		box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
 		position: relative;
 		z-index: 2;
+
+		background: rgba(255, 255, 255, 0.1);
+		-webkit-backdrop-filter: blur(10px);
+		backdrop-filter: blur(10px);
+		border-radius: 4px;
+		box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+		border: 1px solid rgba(255, 255, 255, 0.2);
 	}
 
 	.chain-selector {
@@ -304,18 +321,19 @@
 		padding: 1rem;
 		background: #f8fafc;
 		border: 2px solid transparent;
-		border-radius: 12px;
+		border-radius: 4px;
 		cursor: pointer;
 		transition: all 0.2s;
 	}
 
 	.chain-option:hover {
-		background: #f1f5f9;
+		background: rgba(62, 48, 192, 0.9);
+		color: white;
 	}
 
 	.chain-option.selected {
-		background: #e2e8f0;
-		border-color: #e2e8f0;
+		background: rgba(106, 89, 255, 0.8);
+		color: white;
 	}
 
 	.selected-tab {
@@ -328,7 +346,7 @@
 	.tab-content {
 		margin-top: 1rem;
 		padding: 1rem;
-		border: 2px solid #e2e8f0;
+		border: 2px solid rgba(62, 48, 192, 0.9);
 		border-radius: 12px;
 	}
 
@@ -411,8 +429,8 @@
 		box-shadow: none !important;
 	}
 	input:-webkit-autofill {
-		-webkit-box-shadow: 0 0 0 1000px white inset !important;
-		box-shadow: 0 0 0 1000px white inset !important;
+		-webkit-box-shadow: 0 0 0 1000px #f6dbf5d9 inset !important;
+		box-shadow: 0 0 0 1000px #f6dbf5d9 inset !important;
 		-webkit-text-fill-color: inherit !important;
 	}
 
@@ -438,15 +456,15 @@
 		padding: 1rem;
 		font-size: 1.125rem;
 		font-weight: 600;
-		color: white;
-		background: #3b82f6;
+		color: #f7f0f7d9;
+		background: rgba(62, 48, 192, 0.9);
+
 		border: none;
-		border-radius: 12px;
 		cursor: pointer;
 		transition: background 0.2s;
 	}
 
 	.transfer-button:hover {
-		background: #2563eb;
+		background: rgba(106, 89, 255, 0.9);
 	}
 </style>
